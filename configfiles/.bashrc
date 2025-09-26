@@ -1,0 +1,84 @@
+[[ \$- != *i* ]] && return
+
+GRC_ALIASES=true
+[[ -s "/etc/profile.d/grc.sh" ]] && source /etc/grc.sh
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+bind 'set completion-ignore-case on'
+
+export TERM=xterm-256color
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export MANROFFOPT="-P -c"
+export EDITOR='vim'
+export PATH="\$HOME/.local/bin:\$PATH"
+export GOPATH="\$HOME/.local/go"
+export MAKEFLAGS="-j2"
+
+export FZF_DEFAULT_OPTS="
+	--color=fg:#ffffff,bg:#000000,hl:#ff0000
+	--color=fg+:#e0def4,bg+:#26233a,hl+:#1be6ee
+	--color=border:#403d52,header:#31748f,gutter:#191724
+	--color=spinner:#f6c177,info:#9ccfd8,separator:#403d52
+	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
+
+export LESS='-R -M -I'
+export LESSPROMPT='%{?f%f:}  %{G[Line: %l/%L]}%{M[Col: %c]} (%p%%)'
+export LESS_TERMCAP_md=$'\e[01;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[04;35m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;44;33m'
+export LESS_TERMCAP_se=$'\e[0m'
+
+$PKG_ALIASES
+
+alias ls='lsd'
+alias l='lsd -alh'
+alias lh='lsd -hl'
+alias ll='lsd -a'
+alias s='source ~/.bashrc'
+alias cat='bat --style=plain --theme=GitHub'
+alias p='sudo poweroff'
+alias r='sudo reboot'
+alias mi='sudo make install'
+alias mc='make clean'
+alias lb='lsblk'
+alias htop='htop -t'
+alias patch='patch -p1 <'
+alias grep='grep -i --color=auto'
+alias gc='git clone --depth=1'
+alias gs='git status'
+alias gm='git commit -m'
+alias ga='git add .'
+alias gr='git restore'
+alias gp='git push'
+alias gl='git log'
+alias gf='git diff'
+alias yl='yt-dlp -F'
+alias y='yt-dlp'
+alias ya='yt-dlp -f 140'
+alias yb='yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" --merge-output-format mp4'
+alias yt='yt-dlp --skip-download --write-thumbnail'
+
+function parse_git_branch() {
+	BRANCH=$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+	if [ -n "$BRANCH" ]; then
+		STAT=$(parse_git_dirty)
+		echo "[${BRANCH}${STAT}]"
+	fi
+}
+
+function parse_git_dirty() {
+	status=$(git status 2>&1)
+	bits=''
+	echo "$status" | grep -q "renamed:" && bits=">$bits"
+	echo "$status" | grep -q "Your branch is ahead of" && bits="*$bits"
+	echo "$status" | grep -q "new file:" && bits="+$bits"
+	echo "$status" | grep -q "Untracked files" && bits="?$bits"
+	echo "$status" | grep -q "deleted:" && bits="x$bits"
+	echo "$status" | grep -q "modified:" && bits="!$bits"
+	[ -n "$bits" ] && echo " $bits"
+}
+
+export PS1="[\[\e[36m\]\h \w\[\e[m\]\[\e[35m\]\`parse_git_branch\`\[\e[m\]] "
