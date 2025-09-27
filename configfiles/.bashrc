@@ -1,18 +1,20 @@
-[[ \$- != *i* ]] && return
+[[ $- != *i* ]] && return
+[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 GRC_ALIASES=true
 [[ -s "/etc/profile.d/grc.sh" ]] && source /etc/grc.sh
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 bind 'set completion-ignore-case on'
+
+HISTSIZE= HISTFILESIZE=
 
 export TERM=xterm-256color
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 export MANROFFOPT="-P -c"
 export EDITOR='vim'
-export PATH="\$HOME/.local/bin:\$PATH"
-export GOPATH="\$HOME/.local/go"
+export PATH="$HOME/.local/bin:$PATH"
+export GOPATH="$HOME/.local/go"
 export MAKEFLAGS="-j2"
 
 export FZF_DEFAULT_OPTS="
@@ -30,8 +32,6 @@ export LESS_TERMCAP_us=$'\e[04;35m'
 export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_so=$'\e[01;44;33m'
 export LESS_TERMCAP_se=$'\e[0m'
-
-$PKG_ALIASES
 
 alias ls='lsd'
 alias l='lsd -alh'
@@ -62,23 +62,48 @@ alias yb='yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -
 alias yt='yt-dlp --skip-download --write-thumbnail'
 
 function parse_git_branch() {
-	BRANCH=$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
-	if [ -n "$BRANCH" ]; then
-		STAT=$(parse_git_dirty)
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT=`parse_git_dirty`
 		echo "[${BRANCH}${STAT}]"
+	else
+		echo ""
 	fi
 }
 
-function parse_git_dirty() {
-	status=$(git status 2>&1)
+function parse_git_dirty {
+	status=`git status 2>&1 | tee`
+	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
 	bits=''
-	echo "$status" | grep -q "renamed:" && bits=">$bits"
-	echo "$status" | grep -q "Your branch is ahead of" && bits="*$bits"
-	echo "$status" | grep -q "new file:" && bits="+$bits"
-	echo "$status" | grep -q "Untracked files" && bits="?$bits"
-	echo "$status" | grep -q "deleted:" && bits="x$bits"
-	echo "$status" | grep -q "modified:" && bits="!$bits"
-	[ -n "$bits" ] && echo " $bits"
+	if [ "${renamed}" == "0" ]; then
+		bits=">${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits="*${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits="+${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits="?${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits="x${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits="!${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+		echo " ${bits}"
+	else
+		echo ""
+	fi
 }
 
 export PS1="[\[\e[36m\]\h \w\[\e[m\]\[\e[35m\]\`parse_git_branch\`\[\e[m\]] "
