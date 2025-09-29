@@ -1,0 +1,52 @@
+[user]
+	email = bachiralfa@gmail.com
+	name = elbachir-one
+
+[credential]
+	helper = store
+
+[init]
+	defaultBranch = master
+
+[interactive]
+	diffFilter = "nvim -c \"set nolist\" -R -"
+
+[core]
+	pager = delta
+	editor = vim
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	# side-by-side = true
+	# dark = true
+	# light = true
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+	renames = copies
+
+[status]
+	branch = true
+	showStash = true
+
+[branch]
+	sort = -committerdate
+
+[alias]
+	lol = log --oneline --decorate
+	graph = log --oneline --graph --decorate
+
+[color.decorate]
+	HEAD = blue bold
+
+[grep]
+	patternType = perl
+
+[rerere]
+	enabled = true

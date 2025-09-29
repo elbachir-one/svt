@@ -1,0 +1,4 @@
+$include /etc/inputrc
+
+"\C-b": backward-word
+"\C-f": forward-word
