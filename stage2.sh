@@ -13,13 +13,13 @@ else
 fi
 
 # Common packages (same name on all systems)
-COMMON_PKG="git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
+COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
 	aria2 chafa tree dnsmasq sakura jq python3 vim curl bash bash-completion \
-	alsa-utils llvm wget fastfetch"
+	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind)
 
-LINUX_PKG="rtmpdump time ranger clang nodejs"
+LINUX_PKG=(rtmpdump time ranger clang nodejs)
 
-NOT_COMMON_PKG="go st terminus-font"
+NOT_COMMON_PKG=(go st terminus-font)
 
 # ARCH
 ##
@@ -60,8 +60,8 @@ yay -Syu --noconfirm
 
 echo "Installing some packages"
 echo
-yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} \
-	$COMMON_PKG $NOT_COMMON_PKG $LINUX_PKG
+yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools python-pytest
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -118,8 +118,8 @@ sudo xbps-install -uy xbps
 sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
-	linux-lts linux-lts-headers harfbuzz-devel $COMMON_PKG $NOT_COMMON_PKG
-	$LINUX_PKG
+	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" \
+	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
 	echo "Reconfiguring All"
 	echo
@@ -192,7 +192,7 @@ elif [[ "$HOSTNAME" == *"DEB"* ]]; then
 	sudo apt update && sudo apt -y upgrade
 	sudo apt install -y build-essential imagemagick libxft-dev fonts-font-awesome \
 		libxkbcommon-dev fonts-noto-cjk fonts-noto-color-emoji fonts-terminus \
-		stterm golang $COMMON_PKG $LINUX_PKG
+		stterm golang "${COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
 	echo
 	sudo tee /etc/default/grub > /dev/null <<EOF
@@ -236,7 +236,7 @@ sudo apk update && sudo apk upgrade
 
 echo
 sudo apk add build-base pulseaudio imagemagick font-noto-{cjk,emoji} \
-	$COMMON_PKG $NOT_COMMON_PKG $LINUX_PKG
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
 echo
 sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -267,6 +267,13 @@ sudo sed -i 's|^root:x:0:0:root:/root:/bin/sh$|root:x:0:0:root:/root:/bin/bash|'
 sudo sed -i 's|^sh:x:1000:1000:sh:/home/sh:/bin/sh$|sh:x:1000:1000:sh:/home/sh:/bin/bash|' /etc/passwd
 echo
 
+sudo tee /etc/apk/repositories > /dev/null <<EOF
+#/media/cdrom/apks
+http://mirror.marwan.ma/alpine/edge/main
+http://mirror.marwan.ma/alpine/edge/community
+http://mirror.marwan.ma/alpine/edge/testing
+EOF
+
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='apk search'
 alias u='sudo apk update && sudo apk upgrade'
@@ -288,7 +295,7 @@ elif [[ "$HOSTNAME" == *"FREE_BSD"* ]]; then
 
 	echo
 	sudo pkg install -y ImageMagick7 libXft font-awesome libXkbcommon noto-{extra,emoji} \
-		$COMMON_PKG $NOT_COMMON_PKG npm nnn
+		"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" npm nnn python valgrind
 
 	echo
 	sudo tee /boot/loader.conf > /dev/null <<EOF
@@ -317,7 +324,7 @@ tee ~/.bash_aliases > /dev/null <<'EOF'
 		source /usr/local/share/bash-completion/bash_completion.sh
 
 alias q='pkg search'
-alias u='sudo pkg update && sudo pkg upgrade'
+alias u='sudo pkg update && sudo pkg upgrade -y'
 alias i='sudo pkg install -y'
 alias c='sudo pkg clean -y'
 EOF
@@ -375,11 +382,8 @@ for file in "$DOTFILES_STORE"/.* "$DOTFILES_STORE"/*; do
 done
 
 echo
-source ~/.bashrc
-
-echo
-echo
 echo "Setup complete for $HOSTNAME. You can reboot now, or the system will automatically reboot in 30 seconds."
 echo
 sleep 5
+
 sudo reboot
