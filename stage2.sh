@@ -15,7 +15,8 @@ fi
 # Common packages (same name on all systems)
 COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
 	aria2 chafa tree dnsmasq sakura jq python3 vim curl bash bash-completion \
-	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind)
+	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
+	less)
 
 LINUX_PKG=(rtmpdump time ranger clang nodejs)
 
@@ -61,7 +62,8 @@ yay -Syu --noconfirm
 echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
-	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools python-pytest
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
+	python-pytest git-delta
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -118,7 +120,7 @@ sudo xbps-install -uy xbps
 sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
-	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" \
+	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
 	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
 	echo "Reconfiguring All"
@@ -192,7 +194,7 @@ elif [[ "$HOSTNAME" == *"DEB"* ]]; then
 	sudo apt update && sudo apt -y upgrade
 	sudo apt install -y build-essential imagemagick libxft-dev fonts-font-awesome \
 		libxkbcommon-dev fonts-noto-cjk fonts-noto-color-emoji fonts-terminus \
-		stterm golang "${COMMON_PKG[@]}" "${LINUX_PKG[@]}"
+		stterm golang "${COMMON_PKG[@]}" "${LINUX_PKG[@]}" git-delta
 
 	echo
 	sudo tee /etc/default/grub > /dev/null <<EOF
@@ -235,7 +237,7 @@ echo
 sudo apk update && sudo apk upgrade
 
 echo
-sudo apk add build-base pulseaudio imagemagick font-noto-{cjk,emoji} \
+sudo apk add build-base pulseaudio imagemagick font-noto-{cjk,emoji} delta \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
 echo
@@ -295,7 +297,7 @@ elif [[ "$HOSTNAME" == *"FREE_BSD"* ]]; then
 
 	echo
 	sudo pkg install -y ImageMagick7 libXft font-awesome libXkbcommon noto-{extra,emoji} \
-		"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" npm nnn python valgrind
+		"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" npm nnn python valgrind git-delta
 
 	echo
 	sudo tee /boot/loader.conf > /dev/null <<EOF
