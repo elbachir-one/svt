@@ -69,6 +69,14 @@ echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
 
 echo
+sudo sed -i \
+    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
+    -e 's/^fallback_image/#fallback_image/' \
+    -e 's/^fallback_uki/#fallback_uki/' \
+    -e 's/^fallback_options/#fallback_options/' \
+    /etc/mkinitcpio.d/linux-lts.preset
+
+echo
 sudo mkinitcpio -P
 
 echo
