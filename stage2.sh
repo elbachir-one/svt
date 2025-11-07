@@ -8,8 +8,10 @@ set -euo pipefail
 # Get the Hostname (DEB, FREE_BSD, ARCH, VOID, ALPINE)
 if command -v hostnamectl >/dev/null 2>&1; then
 	HOSTNAME=$(hostnamectl --static)
-else
+elif command -v hostname >/dev/null 2>&1; then
 	HOSTNAME=$(hostname)
+else
+	HOSTNAME=$(cat /etc/hostname)
 fi
 
 # Common packages (same name on all systems)
@@ -18,7 +20,7 @@ COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
 	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
 	less)
 
-LINUX_PKG=(rtmpdump time ranger clang nodejs)
+LINUX_PKG=(rtmpdump time ranger clang nodejs parted ufdtools)
 
 NOT_COMMON_PKG=(go st terminus-font)
 
@@ -290,6 +292,68 @@ alias u='sudo apk update && sudo apk upgrade'
 alias i='sudo apk add'
 alias c='sudo apk cache clean'
 alias d='sudo apk del'
+EOF
+
+# ARTIX
+#
+elif [[ "$HOSTNAME" == *"ARTIX"* ]]; then
+	echo "Detected Artix Linux system ($HOSTNAME)"
+
+	echo
+	sudo tee /run/NetworkManager/resolv.conf >> /dev/null <<EOF
+	nameserver 1.1.1.1
+	nameserver 8.8.8.8
+EOF
+
+echo
+sudo sed -i '/^OPTIONS=/ s/\<debug\>/!debug/' /etc/makepkg.conf
+
+echo
+sudo pacman -Syu --noconfirm
+sudo pacman -S --noconfirm git go base-devel
+
+echo
+echo "Installing YAY"
+cd /tmp/
+[ -d yay ] && rm -rf yay
+git clone https://aur.archlinux.org/yay.git
+cd yay && makepkg -si --noconfirm
+cd ~
+
+echo
+echo "Updating the System"
+yay -Syu --noconfirm
+
+echo "Installing some packages"
+echo
+yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
+	python-pytest git-delta-git
+
+echo
+sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
+
+echo
+sudo sed -i \
+    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
+    -e 's/^fallback_image/#fallback_image/' \
+    -e 's/^fallback_uki/#fallback_uki/' \
+    -e 's/^fallback_options/#fallback_options/' \
+    /etc/mkinitcpio.d/linux-lts.preset
+
+echo
+sudo mkinitcpio -P
+
+echo
+yay -Sc --noconfirm
+
+echo
+tee ~/.bash_aliases > /dev/null <<EOF
+alias q='yay -Ss'
+alias u='yay -Syu --noconfirm && yay -Sc --noconfirm'
+alias i='yay -S --noconfirm && yay -Sc --noconfirm'
+alias c='yay -Sc --noconfirm'
+alias d='yay -Rns'
 EOF
 
 # FREE BSD
