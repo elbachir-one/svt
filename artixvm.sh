@@ -2,7 +2,7 @@
 
 # --- Artix Linux auto installer for qemu made by alpha --- #
 
-# This script automatically installs Artix Linux with some defaults:
+# This script automatically installs Artix Linux with some defaults
 # - Default username, root password, and user password are all set to "artix"
 
 stage1() {
@@ -33,28 +33,24 @@ stage1() {
 	mkfs.vfat -F32 "${device}1"
 	mkfs.ext4 "${device}2"
 
-	# Mount partitions
 	mount "${device}2" /mnt
 	mount --mkdir "${device}1" /mnt/boot
 
 	echo "Install base system"
 	basestrap -K /mnt linux-lts linux-lts-headers base base-devel vim wget \
-	terminus-font efibootmgr git go mtools ntfs-3g dosfstools curl \
-	reflector alsa-utils bash-completion freetype2 libisoburn fuse3 dinit \
-	networkmanager-dinit openssh-dinit
+	terminus-font efibootmgr git go mtools ntfs-3g dosfstools curl reflector \
+	alsa-utils bash-completion freetype2 libisoburn fuse3 dinit openssh-dinit \
+	networkmanager-dinit
 
-	# Generate fstab
 	fstabgen -U /mnt > /mnt/etc/fstab
 
-	# UUID copy
 	getUUID=$(blkid -s UUID -o value "${device}2")
 	echo "$getUUID" > /mnt/getuuid
 
 	# Copy second stage of script into new system
 	sed '1,/^#stage2$/d' "$0" > /mnt/artixvm.sh
 	chmod +x /mnt/artixvm.sh
-	
-	# Chroot into system
+
 	artix-chroot /mnt env IN_CHROOT ./artixvm.sh
 }
 
@@ -65,7 +61,6 @@ stage2() {
 	# ========================
 	printf '\033c'
 
-	# Variables
 	echo
 	echo "System Configuration"
 	rootpassword="artix"

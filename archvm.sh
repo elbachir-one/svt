@@ -35,27 +35,23 @@ stage1() {
 	mkfs.vfat -F32 "${device}1"
 	mkfs.ext4 "${device}2"
 
-	# Mount partitions
 	mount "${device}2" /mnt
 	mount --mkdir "${device}1" /mnt/boot
 
 	echo "Install base system"
-	pacstrap -K /mnt linux-lts linux-lts-headers base base-devel vim \
-	terminus-font efibootmgr git go openssh mtools ntfs-3g dosfstools \
-	reflector alsa-utils bash-completion freetype2 libisoburn fuse3 curl wget
+	pacstrap -K /mnt linux-lts linux-lts-headers base base-devel vim mtools \
+	terminus-font efibootmgr git go openssh ntfs-3g dosfstools wget curl fuse3 \
+	reflector alsa-utils bash-completion freetype2 libisoburn
 
-	# Generate fstab
 	genfstab -U /mnt > /mnt/etc/fstab
 
-	# UUID copy
 	getUUID=$(blkid -s UUID -o value "${device}2")
 	echo "$getUUID" > /mnt/getuuid
 
 	# Copy second stage of script into new system
 	sed '1,/^#stage2$/d' "$0" > /mnt/archvm.sh
 	chmod +x /mnt/archvm.sh
-	
-	# Chroot into system
+
 	arch-chroot /mnt env IN_CHROOT ./archvm.sh
 }
 
