@@ -32,9 +32,9 @@ stage1() {
 	wipefs -a "$device"
 
 	parted --script "$device" -- mklabel gpt \
-		mkpart ESP fat32 1MiB 512MiB \
+		mkpart ESP fat32 1MiB 129MiB \
 		set 1 esp on \
-		mkpart primary 512MiB 100%
+		mkpart primary 129MiB 100%
 
 	partprobe "$device"
 	sleep 1
