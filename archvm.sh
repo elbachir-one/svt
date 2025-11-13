@@ -123,8 +123,8 @@ EOF
 	systemctl enable systemd-networkd
 	systemctl enable systemd-resolved
 	systemctl enable systemd-timesyncd
-	sudo systemctl enable reflector
-	sudo systemctl enable reflector.timer
+	systemctl enable reflector
+	systemctl enable reflector.timer
 	systemctl enable sshd
 
 	echo "Bootloader installation"
