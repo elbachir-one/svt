@@ -52,7 +52,7 @@ stage1() {
 	sed '1,/^#stage2$/d' "$0" > /mnt/archvm.sh
 	chmod +x /mnt/archvm.sh
 
-	arch-chroot /mnt env IN_CHROOT ./archvm.sh
+	arch-chroot /mnt env IN_CHROOT=1 ./archvm.sh
 }
 
 stage2() {

@@ -51,7 +51,7 @@ stage1() {
 	sed '1,/^#stage2$/d' "$0" > /mnt/artixvm.sh
 	chmod +x /mnt/artixvm.sh
 
-	artix-chroot /mnt env IN_CHROOT ./artixvm.sh
+	artix-chroot /mnt env IN_CHROOT=1 ./artixvm.sh
 }
 
 stage2() {
