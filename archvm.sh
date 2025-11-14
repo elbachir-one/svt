@@ -38,15 +38,21 @@ stage1() {
 	mount "${device}2" /mnt
 	mount --mkdir "${device}1" /mnt/boot
 
-	echo "Install base system"
-	pacstrap -K /mnt linux-lts linux-lts-headers base base-devel vim mtools \
+	echo "Console Keymap Early Setup"
+	cat > /mnt/etc/vconsole.conf <<EOF
+KEYMAP=fr
+FONT=ter-d20b
+EOF
+
+echo "Install base system"
+pacstrap -K /mnt linux-lts linux-lts-headers base base-devel vim mtools \
 	terminus-font efibootmgr git go openssh ntfs-3g dosfstools wget curl fuse3 \
 	reflector alsa-utils bash-completion freetype2 libisoburn
 
-	genfstab -U /mnt > /mnt/etc/fstab
+genfstab -U /mnt > /mnt/etc/fstab
 
-	getUUID=$(blkid -s UUID -o value "${device}2")
-	echo "$getUUID" > /mnt/getuuid
+getUUID=$(blkid -s UUID -o value "${device}2")
+echo "$getUUID" > /mnt/getuuid
 
 	# Copy second stage of script into new system
 	sed '1,/^#stage2$/d' "$0" > /mnt/archvm.sh
@@ -100,62 +106,62 @@ KEYMAP=$keymap
 FONT=$font
 EOF
 
-	echo "Pacman Config"
-	sed -i 's/^#Color/Color/' /etc/pacman.conf
-	sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 1/' /etc/pacman.conf
+echo "Pacman Config"
+sed -i 's/^#Color/Color/' /etc/pacman.conf
+sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 1/' /etc/pacman.conf
 
-	echo "Hosts"
-	cat > /etc/hosts <<EOF
+echo "Hosts"
+cat > /etc/hosts <<EOF
 127.0.0.1       localhost
 ::1             localhost
 127.0.1.1       $hostname.localdomain $hostname
 EOF
 
-	echo "Systemd Networkd"
-	tee > /etc/systemd/network/en.network <<EOF
+echo "Systemd Networkd"
+tee > /etc/systemd/network/en.network <<EOF
 [Match]
 Name=en*
 [Network]
 DHCP=ipv4
 EOF
 
-	echo "Enabling services"
-	systemctl enable systemd-networkd
-	systemctl enable systemd-resolved
-	systemctl enable systemd-timesyncd
-	systemctl enable reflector
-	systemctl enable reflector.timer
-	systemctl enable sshd
+echo "Enabling services"
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
+systemctl enable systemd-timesyncd
+systemctl enable reflector
+systemctl enable reflector.timer
+systemctl enable sshd
 
-	echo "Bootloader installation"
-	bootctl install
+echo "Bootloader installation"
+bootctl install
 
-	getUUID=$(cat getuuid)
+getUUID=$(cat getuuid)
 
-	tee > /boot/loader/loader.conf <<EOF
+tee > /boot/loader/loader.conf <<EOF
 default arch
 timeout 0
 console-mode max
 EOF
 
-	tee > /boot/loader/entries/arch.conf <<EOF
+tee > /boot/loader/entries/arch.conf <<EOF
 title Arch Linux
 linux /vmlinuz-linux-lts
 initrd /initramfs-linux-lts.img
 options root=UUID=$getUUID rw console=ttyS0,115200n8
 EOF
 
-	echo "DNS Setup"
-	tee > /etc/resolv.conf <<EOF
+echo "DNS Setup"
+tee > /etc/resolv.conf <<EOF
 nameserver 1.1.1.1
 nameserver 8.8.8.8
 EOF
 
-	echo "Rebuilding the Initramfs"
-	mkinitcpio -P
+echo "Rebuilding the Initramfs"
+mkinitcpio -P
 
-	echo "Installation complete! Type reboot."
-	echo "The User name is ($username) and the password is ($userpassword) also the root password is ($rootpassword)"
+echo "Installation complete! Type reboot."
+echo "The User name is ($username) and the password is ($userpassword) also the root password is ($rootpassword)"
 }
 
 # ==================
