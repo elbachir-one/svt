@@ -3,9 +3,7 @@
 # --- arch linux auto installer for qemu made by alpha --- #
 
 # This script automatically installs Arch Linux with some defaults:
-# - systemd-boot as the bootloader
-# - systemd-networkd for networking
-# - Default username, root password, and user password are all set to "arch"
+# Default username, root password, and user password are all set to "arch"
 
 stage1() {
 	# ========================

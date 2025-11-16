@@ -3,7 +3,7 @@
 # --- Artix Linux auto installer for qemu made by alpha --- #
 
 # This script automatically installs Artix Linux with some defaults
-# - Default username, root password, and user password are all set to "artix"
+# Default username, root password, and user password are all set to "artix"
 
 stage1() {
 	# ========================
