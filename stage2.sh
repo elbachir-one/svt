@@ -72,11 +72,23 @@ sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap
 
 echo
 sudo sed -i \
-    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
-    -e 's/^fallback_image/#fallback_image/' \
-    -e 's/^fallback_uki/#fallback_uki/' \
-    -e 's/^fallback_options/#fallback_options/' \
-    /etc/mkinitcpio.d/linux-lts.preset
+	-e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
+	-e 's/^fallback_image/#fallback_image/' \
+	-e 's/^fallback_uki/#fallback_uki/' \
+	-e 's/^fallback_options/#fallback_options/' \
+	/etc/mkinitcpio.d/linux-lts.preset
+
+echo
+sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
+--protocol https
+--latest 20
+--sort rate
+--age 12
+--country Germany,France,Netherlands,Spain,Portugal,Morocco
+--save /etc/pacman.d/mirrorlist
+--download-timeout 5
+--connection-timeout 5
+EOF
 
 echo
 sudo mkinitcpio -P
@@ -133,17 +145,17 @@ sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
 	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
 	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
 
-	echo "Reconfiguring All"
-	echo
-	sudo xbps-reconfigure -fa
+echo "Reconfiguring All"
+echo
+sudo xbps-reconfigure -fa
 
-	echo
-	sudo rm /boot/vmlinuz-6.12.*
-	sudo rm /boot/config-6.12.*
+echo
+sudo rm /boot/vmlinuz-6.12.*
+sudo rm /boot/config-6.12.*
 
-	echo
-	echo
-	sudo tee /etc/default/grub > /dev/null <<EOF
+echo
+echo
+sudo tee /etc/default/grub > /dev/null <<EOF
 #
 # Configuration file for GRUB.
 #
@@ -214,10 +226,10 @@ GRUB_DISTRIBUTOR="Debian"
 GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS,115200"
 GRUB_CMDLINE_LINUX=""
 EOF
-	sudo chmod -x /etc/grub.d/30_os-prober
-	sudo update-grub
+sudo chmod -x /etc/grub.d/30_os-prober
+sudo update-grub
 
-	echo
+echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='apt search'
 alias u='sudo apt update && sudo apt -y upgrade'
@@ -328,18 +340,30 @@ echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
-	python-pytest git-delta-git
+	python-pytest git-delta-git reflector
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
 
 echo
 sudo sed -i \
-    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
-    -e 's/^fallback_image/#fallback_image/' \
-    -e 's/^fallback_uki/#fallback_uki/' \
-    -e 's/^fallback_options/#fallback_options/' \
-    /etc/mkinitcpio.d/linux-lts.preset
+	-e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/" \
+	-e 's/^fallback_image/#fallback_image/' \
+	-e 's/^fallback_uki/#fallback_uki/' \
+	-e 's/^fallback_options/#fallback_options/' \
+	/etc/mkinitcpio.d/linux-lts.preset
+
+echo
+sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
+--protocol https
+--latest 20
+--sort rate
+--age 12
+--country Germany,France,Netherlands,Spain,Portugal,Morocco
+--save /etc/pacman.d/mirrorlist
+--download-timeout 5
+--connection-timeout 5
+EOF
 
 echo
 sudo mkinitcpio -P
