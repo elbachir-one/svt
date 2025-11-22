@@ -103,6 +103,7 @@ alias u='yay -Syu --noconfirm && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm && yay -Sc --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
+alias mk='sudo mkinitcpio -P -v'
 EOF
 
 # VOID
@@ -378,6 +379,7 @@ alias u='yay -Syu --noconfirm && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm && yay -Sc --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
+alias mk='sudo mkinitcpio -P -v'
 EOF
 
 # FREE BSD
