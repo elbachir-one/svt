@@ -20,7 +20,7 @@ COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
 	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
 	less)
 
-LINUX_PKG=(rtmpdump time ranger clang nodejs parted ufdtools)
+LINUX_PKG=(rtmpdump time ranger clang nodejs parted ufdtools cmake)
 
 NOT_COMMON_PKG=(go st terminus-font)
 
@@ -340,8 +340,7 @@ yay -Syu --noconfirm
 echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
-	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
-	python-pytest git-delta-git reflector
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" python-pytest
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -353,18 +352,6 @@ sudo sed -i \
 	-e 's/^fallback_uki/#fallback_uki/' \
 	-e 's/^fallback_options/#fallback_options/' \
 	/etc/mkinitcpio.d/linux-lts.preset
-
-echo
-sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
---protocol https
---latest 20
---sort rate
---age 12
---country Germany,France,Netherlands,Spain,Portugal,Morocco
---save /etc/pacman.d/mirrorlist
---download-timeout 5
---connection-timeout 5
-EOF
 
 echo
 sudo mkinitcpio -P
