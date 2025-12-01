@@ -65,7 +65,7 @@ echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
-	python-pytest git-delta
+	python-pytest git-delta sshfs
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -144,7 +144,7 @@ sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
 	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
-	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
+	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs
 
 echo "Reconfiguring All"
 echo
@@ -217,7 +217,7 @@ elif [[ "$HOSTNAME" == *"DEB"* ]]; then
 	sudo apt update && sudo apt -y upgrade
 	sudo apt install -y build-essential imagemagick libxft-dev fonts-font-awesome \
 		libxkbcommon-dev fonts-noto-cjk fonts-noto-color-emoji fonts-terminus \
-		stterm golang "${COMMON_PKG[@]}" "${LINUX_PKG[@]}" git-delta
+		stterm golang "${COMMON_PKG[@]}" "${LINUX_PKG[@]}" git-delta sshfs
 
 	echo
 	sudo tee /etc/default/grub > /dev/null <<EOF
@@ -261,7 +261,7 @@ sudo apk update && sudo apk upgrade
 
 echo
 sudo apk add build-base pulseaudio imagemagick font-noto-{cjk,emoji} delta \
-	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}"
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" sshfs
 
 echo
 sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -340,7 +340,8 @@ yay -Syu --noconfirm
 echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
-	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" python-pytest
+	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" python-pytest \
+	sshfs
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -382,7 +383,8 @@ elif [[ "$HOSTNAME" == *"FREE_BSD"* ]]; then
 
 	echo
 	sudo pkg install -y ImageMagick7 libXft font-awesome libXkbcommon noto-{extra,emoji} \
-		"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" npm nnn python valgrind git-delta
+		"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" npm nnn python valgrind git-delta \
+		sshfs
 
 	echo
 	sudo tee /boot/loader.conf > /dev/null <<EOF
