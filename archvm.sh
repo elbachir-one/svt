@@ -5,6 +5,7 @@
 # This script automatically installs Arch Linux with some defaults:
 # Default username, root password, and user password are all set to "arch"
 
+#stage1
 stage1() {
 	# ========================
 	# part1: Base installation
@@ -52,13 +53,13 @@ genfstab -U /mnt > /mnt/etc/fstab
 getUUID=$(blkid -s UUID -o value "${device}2")
 echo "$getUUID" > /mnt/getuuid
 
-	# Copy second stage of script into new system
 	sed '1,/^#stage2$/d' "$0" > /mnt/archvm.sh
 	chmod +x /mnt/archvm.sh
 
 	arch-chroot /mnt env IN_CHROOT=1 ./archvm.sh
 }
 
+#stage2
 stage2() {
 	#part2
 	# ========================
