@@ -5,6 +5,7 @@
 # This script automatically installs Artix Linux with some defaults
 # Default username, root password, and user password are all set to "artix"
 
+#stage1
 stage1() {
 	# ========================
 	# part1: Base installation
@@ -54,6 +55,7 @@ stage1() {
 	artix-chroot /mnt env IN_CHROOT=1 ./artixvm.sh
 }
 
+#stage2
 stage2() {
 	#part2
 	# ========================

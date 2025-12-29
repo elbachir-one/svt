@@ -4,6 +4,7 @@
 # --- Void Linux Auto Installer For Qemu Made by El Bachir - <elbachir.org> --- #
 #
 
+#stage1
 stage1() {
 	# ========================
 	# part1: Base installation
@@ -66,6 +67,7 @@ EOF
 	xchroot /mnt env IN_CHROOT=1 ./voidvm.sh
 }
 
+#stage2
 stage2() {
 	# ========================
 	# part2: System configure
