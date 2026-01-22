@@ -3,6 +3,7 @@
 # This is stage 2 after installing the system, where all the necessary setup
 # tasks are handled automatically instead of manually.
 
+# NOTE: Don't run this script as root or in the root user.
 set -euo pipefail
 
 # Get the Hostname (DEB, FREE_BSD, ARCH, VOID, ALPINE)
@@ -20,7 +21,7 @@ COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg \
 	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
 	less)
 
-LINUX_PKG=(rtmpdump time ranger clang nodejs parted ufdtools cmake)
+LINUX_PKG=(rtmpdump time ranger clang nodejs parted udftools cmake)
 
 NOT_COMMON_PKG=(go st terminus-font)
 
