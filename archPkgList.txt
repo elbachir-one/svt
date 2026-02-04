@@ -479,6 +479,5 @@ xorg-xwininfo
 xorg-xwud
 xss-lock
 yakuake
-yay
 zanshin
 zip
