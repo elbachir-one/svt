@@ -242,7 +242,6 @@ kweather
 kwordquiz
 libaacs
 libappindicator
-libbdplus
 libcurl-gnutls
 libdvdcss
 libvirt
@@ -358,12 +357,10 @@ time
 tint2
 tk
 tmux
-tofi
 tokodon
 tree
 tumbler
 udftools
-ugrd
 umbrello
 unrar
 valgrind

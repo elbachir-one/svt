@@ -91,6 +91,13 @@ sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
 --connection-timeout 5
 EOF
 
+echo "Installing Other Packages"
+sleep 2s
+cd /tmp/ && wget https://raw.githubusercontent.com/elbachir-one/svt/refs/heads/main/archPkgList.txt
+cd
+echo
+yay -S --noconfirm --needed - < /tmp/archPkgList.txt
+
 echo
 sudo mkinitcpio -P
 
