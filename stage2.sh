@@ -66,7 +66,7 @@ echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
-	python-pytest git-delta sshfs paccache-hook mlocate
+	python-pytest git-delta sshfs paccache-hook mlocate nasm
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -152,7 +152,7 @@ sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
 	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
-	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs
+	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs nasm
 
 echo "Reconfiguring All"
 echo
