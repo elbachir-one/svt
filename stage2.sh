@@ -107,7 +107,7 @@ yay -Sc --noconfirm
 echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='yay -Ss'
-alias u='yay -Syu --noconfirm && yay -Sc --noconfirm'
+alias u='yay -Syu --noconfirm && yay -Sc --noconfirm && sudo mkinitcpio -P -v'
 alias i='yay -S --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
@@ -195,7 +195,7 @@ echo
 
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='xbps-query -Rs'
-alias u='sudo xbps-install -Suy'
+alias u='sudo xbps-install -Suy && sudo xbps-reconfigure -fa'
 alias i='sudo xbps-install -S'
 alias c='sudo xbps-remove -oy && sudo xbps-remove -Oy && sudo vkpurge rm all'
 alias d='sudo xbps-remove -R'
@@ -235,6 +235,9 @@ GRUB_DISTRIBUTOR="Debian"
 GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS,115200"
 GRUB_CMDLINE_LINUX=""
 EOF
+
+echo
+sudo update-initramfs -u -v
 sudo chmod -x /etc/grub.d/30_os-prober
 sudo update-grub
 
@@ -371,7 +374,7 @@ yay -Sc --noconfirm
 echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='yay -Ss'
-alias u='yay -Syu --noconfirm && yay -Sc --noconfirm'
+alias u='yay -Syu --noconfirm && yay -Sc --noconfirm && sudo mkinitcpio -P'
 alias i='yay -S --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
