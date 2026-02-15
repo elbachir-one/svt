@@ -1,13 +1,13 @@
 [[ $- != *i* ]] && return
-[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f "$HOME"/.bash_aliases ] && . "$HOME"/.bash_aliases
+[ -f ~/.fzf.bash ] && source "$HOME"/.fzf.bash
 
 GRC_ALIASES=true
 [[ -s "/etc/profile.d/grc.sh" ]] && source /etc/grc.sh
 
 bind 'set completion-ignore-case on'
 
-HISTSIZE= HISTFILESIZE=
+HISTSIZE=HISTFILESIZE=
 
 export TERM=xterm-256color
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
@@ -62,10 +62,10 @@ alias yb='yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -
 alias yt='yt-dlp --skip-download --write-thumbnail'
 
 function parse_git_branch() {
-	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
 	if [ ! "${BRANCH}" == "" ]
 	then
-		STAT=`parse_git_dirty`
+		STAT=$(parse_git_dirty)
 		echo "[${BRANCH}${STAT}]"
 	else
 		echo ""
@@ -73,13 +73,13 @@ function parse_git_branch() {
 }
 
 function parse_git_dirty {
-	status=`git status 2>&1 | tee`
-	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
-	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
-	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
-	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
-	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
-	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	status=$(git status 2>&1 | tee)
+	dirty=$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
+	untracked=$(echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")
+	ahead=$(echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?")
+	newfile=$(echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?")
+	renamed=$(echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")
+	deleted=$(echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")
 	bits=''
 	if [ "${renamed}" == "0" ]; then
 		bits=">${bits}"
