@@ -25,6 +25,7 @@ LINUX_PKG=(rtmpdump time ranger clang nodejs parted udftools cmake)
 
 NOT_COMMON_PKG=(go st terminus-font)
 
+
 # ARCH
 ##
 
@@ -113,6 +114,7 @@ alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
 alias mk='sudo mkinitcpio -P -v'
 EOF
+
 
 # VOID
 ##
@@ -211,6 +213,7 @@ XBPS_ALLOW_RESTRICTED=yes
 XBPS_MAKEJOBS=2
 EOF
 
+
 # DEBIAN
 ##
 
@@ -244,11 +247,12 @@ sudo update-grub
 echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='apt search'
-alias u='sudo apt update && sudo apt -y upgrade'
+alias u='sudo apt update && sudo apt -y upgrade && sudo update-initramfs -uv && sudo apt autoremove -y && sudo apt clean'
 alias i='sudo apt install -y'
 alias c='sudo apt autoremove -y && sudo apt clean'
 alias d='sudo apt remove --purge -y'
 EOF
+
 
 # ALPINE
 ## Before running the script, uncomment the second line for the APK repositories,
@@ -318,6 +322,7 @@ alias c='sudo apk cache clean'
 alias d='sudo apk del'
 EOF
 
+
 # ARTIX
 #
 elif [[ "$HOSTNAME" == *"ARTIX"* ]]; then
@@ -380,6 +385,7 @@ alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
 alias mk='sudo mkinitcpio -P -v'
 EOF
+
 
 # FREE BSD
 ## Before all you need to login as root and install (bash, sudo)
