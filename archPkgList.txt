@@ -73,7 +73,6 @@ francis
 fzf
 garcon
 ghex
-ghostty
 ghostwriter
 git
 git-delta
@@ -253,8 +252,6 @@ lightdm-slick-greeter
 lightsoff
 linux
 linux-headers
-linux-lts
-linux-lts-headers
 llvm
 lokalize
 lsd
