@@ -108,7 +108,7 @@ yay -Sc --noconfirm
 echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='yay -Ss'
-alias u='yay -Syu --noconfirm && yay -Sc --noconfirm && sudo mkinitcpio -P -v'
+alias u='yay -Syu --noconfirm && sudo mkinitcpio -P -v && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns'
