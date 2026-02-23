@@ -313,6 +313,9 @@ http://mirror.marwan.ma/alpine/edge/main
 http://mirror.marwan.ma/alpine/edge/community
 http://mirror.marwan.ma/alpine/edge/testing
 EOF
+echo
+
+sudo mkinitfs
 
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='apk search'
