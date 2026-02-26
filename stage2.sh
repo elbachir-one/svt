@@ -4,6 +4,7 @@
 # tasks are handled automatically instead of manually.
 
 # NOTE: Don't run this script as root or in the root user.
+
 set -euo pipefail
 
 # Get the Hostname (DEB, FREE_BSD, ARCH, VOID, ALPINE)
@@ -24,8 +25,8 @@ LINUX_PKG=(rtmpdump time ranger clang nodejs parted udftools cmake)
 
 NOT_COMMON_PKG=(go st terminus-font)
 
-
-# ARCH
+##
+#=============== ARCH ===============#
 ##
 
 if [[ "$HOSTNAME" == *"ARCH"* ]]; then
@@ -114,8 +115,8 @@ alias d='yay -Rns && yay -Sc --noconfirm'
 alias mk='sudo mkinitcpio -P -v'
 EOF
 
-
-# VOID
+##
+#=============== VOID ===============#
 ##
 
 elif [[ "$HOSTNAME" == *"VOID"* ]]; then
@@ -212,8 +213,8 @@ XBPS_ALLOW_RESTRICTED=yes
 XBPS_MAKEJOBS=2
 EOF
 
-
-# DEBIAN
+##
+#=============== DEBIAN ===============#
 ##
 
 elif [[ "$HOSTNAME" == *"DEB"* ]]; then
@@ -252,8 +253,10 @@ alias c='sudo apt autoremove -y && sudo apt clean'
 alias d='sudo apt remove --purge -y'
 EOF
 
+##
+#=============== ALPINE ===============#
+##
 
-# ALPINE
 ## Before running the script, uncomment the second line for the APK repositories,
 ## set up passwordless sudo, and install bash and make it the default shell.
 
@@ -325,8 +328,10 @@ alias d='sudo apk del'
 EOF
 
 
-# ARTIX
-#
+##
+#=============== ARTIX ===============#
+##
+
 elif [[ "$HOSTNAME" == *"ARTIX"* ]]; then
 	echo "Detected Artix Linux system ($HOSTNAME)"
 
@@ -389,7 +394,10 @@ alias mk='sudo mkinitcpio -P -v'
 EOF
 
 
-# FREE BSD
+##
+#=============== FREE BSD ===============#
+##
+
 ## Before all you need to login as root and install (bash, sudo)
 ## After that change the shell (chsh -s bash username).
 ## And also add the user to the sudo file.
@@ -442,6 +450,8 @@ else
 	exit 1
 fi
 
+# Extra Configuration
+#
 echo
 echo "Setup of GRC"
 cd /tmp/
