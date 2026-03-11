@@ -19,7 +19,8 @@ fi
 # Common packages (same name on all systems)
 COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg less \
 	aria2 chafa tree dnsmasq sakura jq python3 vim curl bash bash-completion \
-	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind)
+	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
+	meson)
 
 LINUX_PKG=(rtmpdump time ranger clang nodejs parted udftools cmake)
 
@@ -108,6 +109,7 @@ yay -Sc --noconfirm
 echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='yay -Ss'
+alias qq='yay -Qs'
 alias u='yay -Syu --noconfirm && sudo mkinitcpio -P -v && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm'
 alias c='yay -Sc --noconfirm'
