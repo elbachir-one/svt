@@ -156,7 +156,7 @@ sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
 	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
-	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs nasm
+	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs nasm xtools
 
 echo "Reconfiguring All"
 echo
