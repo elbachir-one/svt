@@ -125,9 +125,9 @@ EOF
 	echo "Installation complete! Type reboot."
 }
 
-# ========================
+# ==================
 # Script entry point
-# ========================
+# ==================
 if [ "$IN_CHROOT" = "1" ]; then
 	stage2
 else
