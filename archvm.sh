@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# --- arch linux auto installer for qemu made by alpha --- #
+# --- arch linux auto installer for qemu made by ALPHA --- #
 
 # This script automatically installs Arch Linux with some defaults:
 # Default username, root password, and user password are all set to "arch"
@@ -22,7 +22,7 @@ stage1() {
 	sed -i 's/^#Color/Color/' /etc/pacman.conf
 	sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 1/' /etc/pacman.conf
 	pacman -Sy --noconfirm
-	pacman --noconfirm -S archlinux-keyring
+	pacman --noconfirm -S archlinux-keyring parted
 
 	echo "Partition The Disk"
 	parted --script "$device" -- mklabel gpt \
@@ -55,7 +55,6 @@ echo "$getUUID" > /mnt/getuuid
 
 	sed '1,/^#stage2$/d' "$0" > /mnt/archvm.sh
 	chmod +x /mnt/archvm.sh
-
 	arch-chroot /mnt env IN_CHROOT=1 ./archvm.sh
 }
 
