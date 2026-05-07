@@ -22,7 +22,7 @@ stage1() {
 	sed -i 's/^#Color/Color/' /etc/pacman.conf
 	sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 1/' /etc/pacman.conf
 	pacman -Sy --noconfirm
-	pacman --noconfirm -S artixlinux-keyring
+	pacman -S --noconfirm parted
 
 	echo "Partition The Disk"
 	parted --script "$device" -- mklabel gpt \
@@ -51,7 +51,6 @@ stage1() {
 	# Copy second stage of script into new system
 	sed '1,/^#stage2$/d' "$0" > /mnt/artixvm.sh
 	chmod +x /mnt/artixvm.sh
-
 	artix-chroot /mnt env IN_CHROOT=1 ./artixvm.sh
 }
 
