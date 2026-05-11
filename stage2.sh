@@ -20,7 +20,7 @@ fi
 COMMON_PKG=(git bat lsd yt-dlp fzf tmux fontconfig htop xclip xdotool ffmpeg less \
 	aria2 chafa tree dnsmasq sakura jq python3 vim curl bash bash-completion \
 	alsa-utils llvm wget fastfetch rsync shellcheck diffoscope strace valgrind \
-	meson)
+	meson fontforge)
 
 LINUX_PKG=(rtmpdump time ranger clang nodejs parted udftools cmake)
 
