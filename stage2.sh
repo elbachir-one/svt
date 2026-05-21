@@ -114,7 +114,7 @@ alias u='yay -Syu --noconfirm && sudo mkinitcpio -P -v && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm'
 alias c='yay -Sc --noconfirm'
 alias d='yay -Rns && yay -Sc --noconfirm'
-alias mk='sudo mkinitcpio -P -v'
+alias mk='sudo mkinitcpio -P'
 EOF
 
 ##
