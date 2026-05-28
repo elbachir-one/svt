@@ -110,9 +110,9 @@ echo
 tee ~/.bash_aliases > /dev/null <<EOF
 alias q='yay -Ss'
 alias qq='yay -Qs'
-alias u='yay -Syu --noconfirm && sudo mkinitcpio -P -v && yay -Sc --noconfirm'
+alias u='yay -Syu --noconfirm && sudo mkinitcpio -P && yay -Sc --noconfirm'
 alias i='yay -S --noconfirm'
-alias c='yay -Sc --noconfirm'
+alias c='yay -Sc --noconfirm && yes | sudo paccache -rk1 && yay -Rns $(yay -Qtdq)'
 alias d='yay -Rns && yay -Sc --noconfirm'
 alias mk='sudo mkinitcpio -P'
 EOF
