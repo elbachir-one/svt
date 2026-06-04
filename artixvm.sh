@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# --- Artix Linux auto installer for qemu made by alpha --- #
+# --- Artix Linux auto installer for qemu made by ALPHA --- #
 
 # This script automatically installs Artix Linux with some defaults
 # Default username, root password, and user password are all set to "artix"
@@ -41,7 +41,7 @@ stage1() {
 	basestrap -K /mnt linux-lts linux-lts-headers base base-devel vim wget \
 	terminus-font efibootmgr git go mtools ntfs-3g dosfstools curl reflector \
 	alsa-utils bash-completion freetype2 libisoburn fuse3 dinit openssh-dinit \
-	networkmanager-dinit
+	networkmanager-dinit grub
 
 	fstabgen -U /mnt > /mnt/etc/fstab
 
@@ -112,6 +112,12 @@ EOF
 
 echo "Rebuilding the Initramfs"
 mkinitcpio -P
+
+echo "GRUB setup"
+sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "Installation complete! Type reboot."
 echo "The User name is ($username) and the password is ($userpassword) also the root password is ($rootpassword)"
