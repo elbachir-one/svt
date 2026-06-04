@@ -344,9 +344,6 @@ elif [[ "$HOSTNAME" == *"ARTIX"* ]]; then
 EOF
 
 echo
-sudo sed -i '/^OPTIONS=/ s/\<debug\>/!debug/' /etc/makepkg.conf
-
-echo
 sudo pacman -Syu --noconfirm
 sudo pacman -S --noconfirm git go base-devel
 
