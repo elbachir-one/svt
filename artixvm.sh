@@ -26,9 +26,9 @@ stage1() {
 
 	echo "Partition The Disk"
 	parted --script "$device" -- mklabel gpt \
-		mkpart ESP fat32 1MiB 129MiB \
+		mkpart ESP fat32 1MiB 513MiB \
 		set 1 esp on \
-		mkpart primary 129MiB 100%
+		mkpart primary 513MiB 100%
 
 	echo "Format root/boot"
 	mkfs.vfat -F32 "${device}1"
