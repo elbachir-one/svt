@@ -68,7 +68,9 @@ echo "Installing some packages"
 echo
 yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
-	python-pytest git-delta sshfs paccache-hook mlocate nasm kernel-modules-hook
+	python-pytest git-delta sshfs paccache-hook mlocate nasm kernel-modules-hook \
+	archlinux-contrib xdotool gt scdoc pacman-contrib namcap inetutils ethtool \
+	asciidoctor binwalk extra-cmake-modules inxi tldr wgetpaste
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
@@ -92,6 +94,9 @@ sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
 --download-timeout 5
 --connection-timeout 5
 EOF
+
+echo
+sudo systemctl enable --now reflector.timer
 
 echo "Installing Other Packages"
 sleep 2s
