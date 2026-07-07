@@ -26,9 +26,9 @@ stage1() {
 
 	echo "Partition The Disk"
 	parted --script "$device" -- mklabel gpt \
-		mkpart ESP fat32 1MiB 129MiB \
+		mkpart ESP fat32 1MiB 513MiB \
 		set 1 esp on \
-		mkpart primary 129MiB 100%
+		mkpart primary 513MiB 100%
 
 	echo "Format root/boot"
 	mkfs.vfat -F32 "${device}1"
@@ -37,16 +37,10 @@ stage1() {
 	mount "${device}2" /mnt
 	mount --mkdir "${device}1" /mnt/boot
 
-	echo "Console Keymap Early Setup"
-	cat > /mnt/etc/vconsole.conf <<EOF
-KEYMAP=fr
-FONT=ter-d20b
-EOF
-
 echo "Install base system"
-pacstrap -K /mnt linux-lts linux-lts-headers base base-devel vim mtools \
-	terminus-font efibootmgr git go openssh ntfs-3g dosfstools wget curl fuse3 \
-	reflector alsa-utils bash-completion freetype2 libisoburn
+pacstrap -K /mnt linux linux-headers base base-devel vim mtools terminus-font \
+	efibootmgr git go openssh ntfs-3g dosfstools wget curl fuse3 reflector \
+	alsa-utils bash-completion freetype2 libisoburn
 
 genfstab -U /mnt > /mnt/etc/fstab
 
