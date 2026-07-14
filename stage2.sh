@@ -70,7 +70,7 @@ yay -S --noconfirm imagemagick noto-fonts noto-fonts-{cjk,emoji,extra} namcap \
 	"${COMMON_PKG[@]}" "${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" devtools \
 	python-pytest git-delta sshfs paccache-hook mlocate nasm kernel-modules-hook \
 	archlinux-contrib xdotool gt scdoc pacman-contrib namcap inetutils ethtool \
-	asciidoctor binwalk extra-cmake-modules inxi tldr wgetpaste
+	asciidoctor binwalk extra-cmake-modules inxi tldr wgetpaste patchelf
 
 echo
 sudo sed -i 's/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/HOOKS=(base udev autodetect modconf block filesystems fsck)/' /etc/mkinitcpio.conf
