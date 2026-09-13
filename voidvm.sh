@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# --- Void Linux Auto Installer For Qemu Made by El Bachir - <elbachir.org> --- #
+# --- Void Linux Auto Installer For Qemu Made by El Bachir - <alphab91.xyz> --- #
 #
 
 #stage1
@@ -33,9 +33,9 @@ stage1() {
 	wipefs -a "$device"
 
 	parted --script "$device" -- mklabel gpt \
-		mkpart ESP fat32 1MiB 129MiB \
+		mkpart ESP fat32 1MiB 513MiB \
 		set 1 esp on \
-		mkpart primary 129MiB 100%
+		mkpart primary 513MiB 100%
 
 	partprobe "$device"
 	sleep 1
@@ -62,9 +62,12 @@ UUID=$boot_uuid /boot vfat defaults 0 2
 tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0
 EOF
 
-	sed '1,/^stage2()/d' "$0" > /mnt/voidvm.sh
-	chmod +x /mnt/voidvm.sh
-	xchroot /mnt env IN_CHROOT=1 ./voidvm.sh
+awk '
+/^#stage2/ {found=1; next}
+found {print}
+' "$0" > /mnt/voidvm.sh
+chmod +x /mnt/voidvm.sh
+xchroot /mnt /usr/bin/env IN_CHROOT=1 bash /voidvm.sh
 }
 
 #stage2
@@ -89,40 +92,40 @@ HARDWARECLOCK="UTC"
 KEYMAP=fr
 EOF
 
-	echo "LANG=en_US.UTF-8" > /etc/locale.conf
-	echo "en_US.UTF-8 UTF-8" >> /etc/default/libc-locales
-	xbps-reconfigure -f glibc-locales
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "en_US.UTF-8 UTF-8" >> /etc/default/libc-locales
+xbps-reconfigure -f glibc-locales
 
-	cat > /etc/hosts <<EOF
+cat > /etc/hosts <<EOF
 127.0.0.1       localhost
 ::1             localhost
 127.0.1.1       VOID.localdomain    VOID
 EOF
 
-	sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-	sed -i 's|^GRUB_CMDLINE_LINUX_DEFAULT=.*|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 console=ttyS0,115200n8"|' /etc/default/grub
+sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sed -i 's|^GRUB_CMDLINE_LINUX_DEFAULT=.*|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 console=ttyS0,115200n8"|' /etc/default/grub
 
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
-	grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
 
-	echo "Reconfigure all"
-	xbps-reconfigure -fa
+echo "Reconfigure all"
+xbps-reconfigure -fa
 
-	ln -s /etc/sv/agetty-ttyS0 /etc/runit/runsvdir/default/
-	ln -s /etc/sv/agetty-tty1 /etc/runit/runsvdir/default/
-	ln -s /etc/sv/dhcpcd /etc/runit/runsvdir/default/
-	ln -s /etc/sv/chronyd /etc/runit/runsvdir/default/
-	ln -s /etc/sv/udevd /etc/runit/runsvdir/default/
+ln -s /etc/sv/agetty-ttyS0 /etc/runit/runsvdir/default/
+ln -s /etc/sv/agetty-tty1 /etc/runit/runsvdir/default/
+ln -s /etc/sv/dhcpcd /etc/runit/runsvdir/default/
+ln -s /etc/sv/chronyd /etc/runit/runsvdir/default/
+ln -s /etc/sv/udevd /etc/runit/runsvdir/default/
 
-	ls -alh /etc/runit/runsvdir/default/
+ls -alh /etc/runit/runsvdir/default/
 
-	root_hash=$(openssl passwd -6 'void')
-	sh_hash=$(openssl passwd -6 'void')
+root_hash=$(openssl passwd -6 'void')
+sh_hash=$(openssl passwd -6 'void')
 
-	usermod -p "$root_hash" root
-	usermod -p "$sh_hash" sh
+usermod -p "$root_hash" root
+usermod -p "$sh_hash" sh
 
-	echo "Installation complete! Type reboot."
+echo "Installation complete! Type reboot."
 }
 
 # ==================
