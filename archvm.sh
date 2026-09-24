@@ -138,8 +138,8 @@ EOF
 
 tee > /boot/loader/entries/arch.conf <<EOF
 title Arch Linux
-linux /vmlinuz-linux-lts
-initrd /initramfs-linux-lts.img
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
 options root=UUID=$getUUID rw console=ttyS0,115200n8
 EOF
 

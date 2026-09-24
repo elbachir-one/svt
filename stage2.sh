@@ -81,7 +81,7 @@ sudo sed -i \
 	-e 's/^fallback_image/#fallback_image/' \
 	-e 's/^fallback_uki/#fallback_uki/' \
 	-e 's/^fallback_options/#fallback_options/' \
-	/etc/mkinitcpio.d/linux-lts.preset
+	/etc/mkinitcpio.d/linux.preset
 
 echo
 sudo tee /etc/xdg/reflector/reflector.conf > /dev/null <<EOF
@@ -98,12 +98,12 @@ EOF
 echo
 sudo systemctl enable --now reflector.timer
 
-echo "Installing Other Packages"
-sleep 2s
-cd /tmp/ && wget https://raw.githubusercontent.com/elbachir-one/svt/refs/heads/main/archPkgList.txt
-cd
-echo
-yay -S --noconfirm --needed - < /tmp/archPkgList.txt
+#echo "Installing Other Packages"
+#sleep 2s
+#cd /tmp/ && wget https://raw.githubusercontent.com/elbachir-one/svt/refs/heads/main/archPkgList.txt
+#cd
+#echo
+#yay -S --noconfirm --needed - < /tmp/archPkgList.txt
 
 echo
 sudo mkinitcpio -P
@@ -160,18 +160,16 @@ sudo xbps-install -uy xbps
 sudo xbps-install -Suy
 
 sudo xbps-install -Sy base-devel ImageMagick libXft-devel libxkbcommon-tools \
-	linux-lts linux-lts-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
+	linux linux-headers harfbuzz-devel "${COMMON_PKG[@]}" delta \
 	"${NOT_COMMON_PKG[@]}" "${LINUX_PKG[@]}" fuse-sshfs nasm xtools
 
 echo "Reconfiguring All"
 echo
 sudo xbps-reconfigure -fa
 
-echo
-sudo rm /boot/vmlinuz-6.12.*
-sudo rm /boot/config-6.12.*
+echo "Clean Up old kerenls"
+sudo vkpurge rm all
 
-echo
 echo
 sudo tee /etc/default/grub > /dev/null <<EOF
 #
@@ -379,7 +377,7 @@ sudo sed -i \
 	-e 's/^fallback_image/#fallback_image/' \
 	-e 's/^fallback_uki/#fallback_uki/' \
 	-e 's/^fallback_options/#fallback_options/' \
-	/etc/mkinitcpio.d/linux-lts.preset
+	/etc/mkinitcpio.d/linux.preset
 
 echo
 sudo mkinitcpio -P

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# --- Void Linux Auto Installer For Qemu Made by El Bachir - <alphab91.xyz> --- #
+# --- Void Linux Auto Installer For Qemu Made by ALPHA - <alphab91.xyz> --- #
 #
 
 #stage1
@@ -10,7 +10,7 @@ stage1() {
 	# part1: Base installation
 	# ========================
 	printf '\033c'
-	echo "#-- Void Linux Auto Installer For Qemu Made by El Bachir - <elbachir.org> --#"
+	echo "#-- Void Linux Auto Installer For Qemu Made by ALPHA - <alphab91.xyz> --#"
 	sleep 3s
 
 	device="/dev/vda"
