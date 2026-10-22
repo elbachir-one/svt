@@ -34,21 +34,23 @@ stage1() {
 	mkfs.vfat -F32 "${device}1"
 	mkfs.ext4 "${device}2"
 
+	echo "Mounting the partitions"
 	mount "${device}2" /mnt
 	mount --mkdir "${device}1" /mnt/boot
 
 	echo "Install base system"
-	basestrap -K /mnt linux-lts linux-lts-headers base base-devel vim wget \
-	terminus-font efibootmgr git go mtools ntfs-3g dosfstools curl reflector \
-	alsa-utils bash-completion freetype2 libisoburn fuse3 dinit openssh-dinit \
-	networkmanager-dinit grub
+	basestrap -K /mnt linux linux-headers base base-devel vim wget terminus-font \
+	efibootmgr git go mtools ntfs-3g dosfstools curl reflector alsa-utils fuse3 \
+	bash-completion freetype2 libisoburn dinit openssh-dinit networkmanager-dinit \
+	grub
 
+	echo "Gen the FSTAB file"
 	fstabgen -U /mnt > /mnt/etc/fstab
 
 	getUUID=$(blkid -s UUID -o value "${device}2")
 	echo "$getUUID" > /mnt/getuuid
 
-	# Copy second stage of script into new system
+	echo "Copy second stage of script into new system"
 	sed '1,/^#stage2$/d' "$0" > /mnt/artixvm.sh
 	chmod +x /mnt/artixvm.sh
 	artix-chroot /mnt env IN_CHROOT=1 ./artixvm.sh
