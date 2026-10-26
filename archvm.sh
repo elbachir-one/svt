@@ -101,6 +101,7 @@ EOF
 echo "Pacman Config"
 sed -i 's/^#Color/Color/' /etc/pacman.conf
 sed -i 's/^#\?ParallelDownloads.*/ParallelDownloads = 1/' /etc/pacman.conf
+sed -i '/^#\[multilib\]$/,/^#Include = \/etc\/pacman.d\/mirrorlist$/s/^#//' /etc/pacman.conf
 
 echo "Hosts"
 cat > /etc/hosts <<EOF
